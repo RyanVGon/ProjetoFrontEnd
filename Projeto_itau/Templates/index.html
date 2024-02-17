@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+        {% for pessoa in pessoas %}
+            <li>{{ pessoa }}</li>
+        {% endfor %}
+    </ul>
+    <form action="/adicionar_pessoa" method="post">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id" required>
+        <br>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        <br>
+        <label for="nascimento">Data de Nascimento:</label>
+        <input type="date" id="nascimento" name="nascimento" value="2000-01-01" min="1800-01-01" max="2024-12-31" required >
+        <br>
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" name="endereco" required>
+        <br>
+        <label for="cpf">CPF:</label>
+        <input type="text" id="cpf" name="cpf" required>
+        <br>
+        <label for="estadoCivil">Estado Civil:</label>
+        <input type="text" id="estadoCivil" name="estadoCivil" required>
+        <br>
+        <button type="submit">Adicionar Pessoa</button>
+    </form>
+</body>
+</html>
