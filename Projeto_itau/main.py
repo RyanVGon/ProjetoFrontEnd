@@ -31,7 +31,6 @@ async def Home(request: Request):
         cursor.execute("SELECT * FROM pessoas")
         pessoas = cursor.fetchall()
         print(pessoas)
-        print("Operação bem-sucedida")
     except Exception as e:
         print(e)
     

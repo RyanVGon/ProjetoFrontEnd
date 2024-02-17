@@ -4,33 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+    </style>
+
+
 </head>
 <body>
-    <ul>
+    <table id="tabelaPessoas">
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Data de Nascimento</th>
+            <th>Endereço</th>
+            <th>CPF</th>
+            <th>Estado Civil</th>
+        </tr>
         {% for pessoa in pessoas %}
-            <li>{{ pessoa }}</li>
+        <tr id="{{ pessoa.id }}" nome="{{ pessoa.nome }}" nascimento="{{ pessoa.nascimento }}" endereco="{{ pessoa.endereco }}" cpf="{{ pessoa.cpf }}" estado-civil="{{ pessoa.estado_civil }}">
+            <td>{{ pessoa.id }}</td>
+            <td>{{ pessoa.nome }}</td>
+            <td>{{ pessoa.nascimento }}</td>
+            <td>{{ pessoa.endereco }}</td>
+            <td>{{ pessoa.cpf }}</td>
+            <td>{{ pessoa.estado_civil }}</td>
+        </tr>
         {% endfor %}
-    </ul>
-    <form action="/adicionar_pessoa" method="post">
+    </table>
+
+    
+
+    <form id="formularioPessoa" action="/adicionar_pessoa" method="post">
         <label for="id">ID:</label>
-        <input type="text" id="id" name="id" required>
+        <input type="text" id="id_input" name="id" required>
         <br>
         <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required>
+        <input type="text" id="nome_input" name="nome" required>
         <br>
         <label for="nascimento">Data de Nascimento:</label>
-        <input type="date" id="nascimento" name="nascimento" value="2000-01-01" min="1800-01-01" max="2024-12-31" required >
+        <input type="date" id="nascimento_input" name="nascimento" value="2000-01-01" min="1800-01-01" max="2024-12-31" required >
         <br>
         <label for="endereco">Endereço:</label>
-        <input type="text" id="endereco" name="endereco" required>
+        <input type="text" id="endereco_input" name="endereco" required>
         <br>
         <label for="cpf">CPF:</label>
-        <input type="text" id="cpf" name="cpf" required>
+        <input type="text" id="cpf_input" name="cpf" required>
         <br>
         <label for="estadoCivil">Estado Civil:</label>
-        <input type="text" id="estadoCivil" name="estadoCivil" required>
+        <input type="text" id="estadoCivil_input" name="estadoCivil" required>
         <br>
         <button type="submit">Adicionar Pessoa</button>
     </form>
+    <form action="/" method="get">
+        <button type="submit">Atualizar Lista</button>
+    </form>
+
+    <script>
+        const tabelaPessoas = document.getElementById('tabelaPessoas');
+        const idInput = document.getElementById('id_input');
+        const nomeInput = document.getElementById('nome_input');
+        const nascimentoInput = document.getElementById('nascimento_input');
+        const enderecoInput = document.getElementById('endereco_input');
+        const cpfInput = document.getElementById('cpf_input');
+        const estadoCivilInput = document.getElementById('estadoCivil_input');
+
+        console.log(tabelaPessoas);
+        console.log(idInput);
+
+        tabelaPessoas.addEventListener('click', function(event) {
+
+            if (event.target.tagName === 'TD') {
+                linha = event.target.parentElement;
+                id = linha.getAttribute('id');
+                nome = linha.getAttribute('nome');
+                nascimento = linha.getAttribute('nascimento');
+                endereco = linha.getAttribute('endereco');
+                cpf = linha.getAttribute('cpf');
+                estadoCivil = linha.getAttribute('estado-civil');
+
+                idInput.value = id;
+                nomeInput.value = nome;
+                nascimentoInput.value = nascimento;
+                enderecoInput.value = endereco;
+                cpfInput.value = cpf;
+                estadoCivilInput.value = estadoCivil;
+            }
+        });
+    </script>
+    
 </body>
 </html>
