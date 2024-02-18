@@ -23,9 +23,28 @@
         }
     </style>
 
+    <style>
+        .notificacao {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 16px;
+            border-radius: 2%;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+
 
 </head>
 <body>
+    <div class="notificacao" id="notificacao"></div>
+
+    <h1>Lista de Pessoas</h1>
     <table id="tabelaPessoas">
         <tr>
             <th>ID</th>
@@ -36,13 +55,13 @@
             <th>Estado Civil</th>
         </tr>
         {% for pessoa in pessoas %}
-        <tr id="{{ pessoa.id }}" nome="{{ pessoa.nome }}" nascimento="{{ pessoa.nascimento }}" endereco="{{ pessoa.endereco }}" cpf="{{ pessoa.cpf }}" estado-civil="{{ pessoa.estado_civil }}">
-            <td>{{ pessoa.id }}</td>
-            <td>{{ pessoa.nome }}</td>
-            <td>{{ pessoa.nascimento }}</td>
-            <td>{{ pessoa.endereco }}</td>
-            <td>{{ pessoa.cpf }}</td>
-            <td>{{ pessoa.estado_civil }}</td>
+        <tr id="{{ pessoa[0] }}" nome="{{ pessoa[1] }}" nascimento="{{ pessoa[2] }}" endereco="{{ pessoa[3] }}" cpf="{{ pessoa[4] }}" estado-civil="{{ pessoa[5] }}">
+            <td>{{ pessoa[0] }}</td>
+            <td>{{ pessoa[1] }}</td>
+            <td>{{ pessoa[2] }}</td>
+            <td>{{ pessoa[3] }}</td>
+            <td>{{ pessoa[4] }}</td>
+            <td>{{ pessoa[5] }}</td>
         </tr>
         {% endfor %}
     </table>
@@ -50,23 +69,20 @@
     
 
     <form id="formularioPessoa" action="/adicionar_pessoa" method="post">
-        <label for="id">ID:</label>
-        <input type="text" id="id_input" name="id" required>
-        <br>
         <label for="nome">Nome:</label>
-        <input type="text" id="nome_input" name="nome" required>
+        <input type="text" id="nome" name="nome" required>
         <br>
         <label for="nascimento">Data de Nascimento:</label>
-        <input type="date" id="nascimento_input" name="nascimento" value="2000-01-01" min="1800-01-01" max="2024-12-31" required >
+        <input type="date" id="nascimento" name="nascimento" value="2000-01-01" min="1800-01-01" max="2024-12-31" required >
         <br>
         <label for="endereco">Endereço:</label>
-        <input type="text" id="endereco_input" name="endereco" required>
+        <input type="text" id="endereco" name="endereco" required>
         <br>
         <label for="cpf">CPF:</label>
-        <input type="text" id="cpf_input" name="cpf" required>
+        <input type="text" id="cpf" name="cpf" required>
         <br>
         <label for="estadoCivil">Estado Civil:</label>
-        <input type="text" id="estadoCivil_input" name="estadoCivil" required>
+        <input type="text" id="estadoCivil" name="estadoCivil" required>
         <br>
         <button type="submit">Adicionar Pessoa</button>
     </form>
@@ -74,17 +90,29 @@
         <button type="submit">Atualizar Lista</button>
     </form>
 
+    <form id="formularioDeletar" action="/deletar_cadastro" method="post">
+        <input type="hidden" id="idToDelete" name="id"> 
+    </form>
+
+    <button onclick="deletar()">Deletar Cadastro</button>
+
+    <script>
+        function deletar(){
+
+            if (confirm("Deseja mesmo Deletar esse cadastro?") == true) {
+                document.getElementById('formularioDeletar').submit();
+            }
+        }
+    </script>
+
     <script>
         const tabelaPessoas = document.getElementById('tabelaPessoas');
-        const idInput = document.getElementById('id_input');
-        const nomeInput = document.getElementById('nome_input');
-        const nascimentoInput = document.getElementById('nascimento_input');
-        const enderecoInput = document.getElementById('endereco_input');
-        const cpfInput = document.getElementById('cpf_input');
-        const estadoCivilInput = document.getElementById('estadoCivil_input');
-
-        console.log(tabelaPessoas);
-        console.log(idInput);
+        const idDelete = document.getElementById('idToDelete');
+        const nomeInput = document.getElementById('nome');
+        const nascimentoInput = document.getElementById('nascimento');
+        const enderecoInput = document.getElementById('endereco');
+        const cpfInput = document.getElementById('cpf');
+        const estadoCivilInput = document.getElementById('estadoCivil');
 
         tabelaPessoas.addEventListener('click', function(event) {
 
@@ -97,7 +125,7 @@
                 cpf = linha.getAttribute('cpf');
                 estadoCivil = linha.getAttribute('estado-civil');
 
-                idInput.value = id;
+                idDelete.value = id;
                 nomeInput.value = nome;
                 nascimentoInput.value = nascimento;
                 enderecoInput.value = endereco;
@@ -105,6 +133,22 @@
                 estadoCivilInput.value = estadoCivil;
             }
         });
+    </script>
+
+    <script>
+        function mostrarNotificacao(mensagem) {
+            const notificacao = document.getElementById('notificacao');
+            notificacao.textContent = mensagem;
+            notificacao.style.display = 'block';
+            setTimeout(function() {
+                notificacao.style.display = 'none';
+            }, 3000); // Notificação desaparece após 3 segundos (3000 milissegundos)
+        }
+
+        // Suponha que esta função é chamada após a inclusão bem-sucedida de um cadastro
+        function inclusaoBemSucedida() {
+            mostrarNotificacao('Cadastro incluído com sucesso!');
+        }
     </script>
     
 </body>

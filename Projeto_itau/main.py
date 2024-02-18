@@ -2,35 +2,35 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from starlette.responses import RedirectResponse
 import pypyodbc as odbc
+import sqlite3
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-DRIVER_NAME = 'SQL SERVER'
-SERVER_NAME = 'DESKTOP-NPPOSVU' #select @@SERVERNAME
-DATABASE_NAME = 'empresa'
-
-connection_string = f"""
-    DRIVER={{{DRIVER_NAME}}};
-    SERVER={SERVER_NAME};
-    DATABASE={DATABASE_NAME};
-    Trust_Connection=yes;
-"""
-
 try:
-    conn = odbc.connect(connection_string)
+    banco = sqlite3.connect("Banco_funcionarios")
+    cursor = banco.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS funcionarios (
+            id integer primary key,
+            nome varchar(75),
+            nascimento date,
+            endereco varchar(150),
+            cpf varchar(14) unique,
+            estado_civil varchar(10)
+        )""")
 except Exception as e:
     print(e)
+
 
 @app.get("/", response_class=HTMLResponse)
 async def Home(request: Request):
 
-    cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM pessoas")
+        cursor.execute("SELECT * FROM funcionarios")
         pessoas = cursor.fetchall()
-        print(pessoas)
     except Exception as e:
         print(e)
     
@@ -47,18 +47,64 @@ async def adicionar_pessoa(request: Request):
     #estado_civil
 
     form = await request.form()
-    id = form["id"]
     nome = form["nome"]
     nascimento = form["nascimento"]
     endereco = form["endereco"]
     cpf = form["cpf"]
     estado_civil = form["estadoCivil"]
-    cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO pessoas (id, nome, nascimento, endereco, cpf, estado_civil) VALUES (?, ?, ?, ?, ?, ?)", (id, nome, nascimento, endereco, cpf, estado_civil))
-        conn.commit()
+        insert_string = "INSERT INTO funcionarios (nome, nascimento, endereco, cpf, estado_civil) VALUES (?, ?, ?, ?, ?)"
+        insert_values = (nome, nascimento, endereco, cpf, estado_civil)
+
+        cursor.execute(insert_string, insert_values)
+        banco.commit()
         print("Pessoa adicionada com sucesso")
+        redirect_response = f"""
+            <html>
+                <head>
+                    <meta http-equiv="refresh" content="0; url=/">
+                </head>
+                <body>
+                    <script>
+                        alert("Pessoa adicionada com sucesso!");
+                    </script>
+                </body>
+            </html>
+        """
+        return HTMLResponse(content=redirect_response)
+        
     except Exception as e:
         print(e)
-        return {e}
-    return {"message": "Pessoa adicionada com sucesso"}
+        return {"error": "Erro ao adicionar pessoa", "message": e}
+    
+    
+@app.post("/deletar_cadastro")
+async def deletar_cadastro(request: Request):
+
+    form = await request.form()
+    print(form)
+    id = form["id"]
+    
+    try:
+        string = "delete from funcionarios where id = ?"
+
+        cursor.execute(string, id)
+        banco.commit()
+        print("Pessoa removida com sucesso")
+        redirect_response = f"""
+            <html>
+                <head>
+                    <meta http-equiv="refresh" content="0; url=/">
+                </head>
+                <body>
+                    <script>
+                        alert("Pessoa removida com sucesso!");
+                    </script>
+                </body>
+            </html>
+        """
+        return HTMLResponse(content=redirect_response)
+        
+    except Exception as e:
+        print(e)
+        return {"error": "Erro ao remover pessoa", "message": e}
