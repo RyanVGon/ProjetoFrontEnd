@@ -109,12 +109,21 @@ async def deletar_cadastro(request: Request):
         print(e)
         return {"error": "Erro ao remover pessoa", "message": e}
     
-@app.get("/pesquisar", response_class=HTMLResponse)
-async def pesquisar(request: Request):
+@app.get("/pesquisar")
+async def pesquisar(request: Request, coluna: str, valorPesquisa: str):
+    try:
+        string = f"select * from funcionarios where {coluna} = ?"
 
+        cursor.execute(string, (valorPesquisa,))
+        pessoas = cursor.fetchall()
+        print(pessoas)
+        return templates.TemplateResponse("index.html", {"request": request, "pessoas": pessoas})
+        
+    except Exception as e:
+        print(e)
+        return {"error": "Erro ao pesquisar", "message": e}
 
-    form = await request.form()
-    print(form)
+    
 
     
     
