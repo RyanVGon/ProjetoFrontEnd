@@ -108,3 +108,13 @@ async def deletar_cadastro(request: Request):
     except Exception as e:
         print(e)
         return {"error": "Erro ao remover pessoa", "message": e}
+    
+@app.get("/pesquisar", response_class=HTMLResponse)
+async def pesquisar(request: Request):
+
+
+    form = await request.form()
+    print(form)
+
+    
+    
