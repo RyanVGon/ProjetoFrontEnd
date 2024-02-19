@@ -23,21 +23,6 @@
         }
     </style>
 
-    <style>
-        .notificacao {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            padding: 16px;
-            border-radius: 2%;
-            z-index: 1000;
-            display: none;
-        }
-    </style>
 
 
 </head>
@@ -106,9 +91,10 @@
 
     <form id="formularioDeletar" action="/deletar_cadastro" method="post">
         <input type="hidden" id="idToDelete" name="id"> 
+        <button onclick="deletar()">Deletar Cadastro</button>
     </form>
 
-    <button onclick="deletar()">Deletar Cadastro</button>
+    
 
     <script>
         function deletar(){
