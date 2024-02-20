@@ -8,7 +8,9 @@
         table {
             border-collapse: collapse;
             width: 100%;
-        }
+            max-height: 30px;
+
+        } 
         th, td {
             border: 1px solid #dddddd;
             text-align: left;
@@ -89,18 +91,28 @@
         <button type="submit">Limpar pesquisa</button>
     </form>
 
-    <form id="formularioDeletar" action="/deletar_cadastro" method="post">
+    <form id="formularioDeletar" action="/deletar_cadastro" method="delete">
         <input type="hidden" id="idToDelete" name="id"> 
-        <button onclick="deletar()">Deletar Cadastro</button>
+        <button type="submit" onclick="confirmarDelecao()">Deletar Cadastro</button>
     </form>
 
-    
-
     <script>
-        function deletar(){
+        function confirmarDelecao(){
 
             if (confirm("Deseja mesmo Deletar esse cadastro?") == true) {
-                document.getElementById('formularioDeletar').submit();
+                const idToDelete = document.getElementById('idToDelete').value;
+                fetch('/deletar_cadastro?id=' + idToDelete, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao deletar cadastro');
+                    }
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
             }
         }
     </script>

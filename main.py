@@ -77,13 +77,9 @@ async def adicionar_pessoa(request: Request):
         return {"error": "Erro ao adicionar pessoa", "message": e}
     
     
-@app.post("/deletar_cadastro")
-async def deletar_cadastro(request: Request):
+@app.delete("/deletar_cadastro")
+async def deletar_cadastro(request: Request, id: str):
 
-    form = await request.form()
-    print(form)
-    id = form["id"]
-    
     try:
         string = "delete from funcionarios where id = ?"
 
