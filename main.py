@@ -78,12 +78,15 @@ async def adicionar_pessoa(request: Request):
     
     
 @app.delete("/deletar_cadastro")
-async def deletar_cadastro(request: Request, id: str):
+async def deletar_cadastro(request: Request, id: str = None):
 
+    if id == None:
+        raise ValueError("ID não fornecido")
+    
     try:
         string = "delete from funcionarios where id = ?"
 
-        cursor.execute(string, id)
+        cursor.execute(string, (id,))
         banco.commit()
         print("Pessoa removida com sucesso")
         redirect_response = f"""
@@ -118,6 +121,45 @@ async def pesquisar(request: Request, coluna: str, valorPesquisa: str):
         print(e)
         return {"error": "Erro ao pesquisar", "message": e}
 
+
+@app.post("/update")
+async def atualizar_cadastro(request: Request):
+    data = await request.json()
+    id = data.get("id")
+    nome = data.get("nome")
+    nascimento = data.get("nascimento")
+    endereco = data.get("endereco")
+    cpf = data.get("cpf")
+    estado_civil = data.get("estadoCivil")
+    
+    if id == None:
+        raise ValueError("ID não fornecido")
+    
+    try:
+        update_string = "UPDATE funcionarios set nome = ?, nascimento = ?, endereco = ?, cpf = ?, estado_civil = ? where id = ?"
+        update_values  = (nome, nascimento, endereco, cpf, estado_civil, id)
+        print(update_values)
+
+        cursor.execute(update_string, update_values)
+        banco.commit()
+        print("Cadastro atualizado com sucesso")
+        redirect_response = f"""
+            <html>
+                <head>
+                    <meta http-equiv="refresh" content="0; url=/">
+                </head>
+                <body>
+                    <script>
+                        alert("Cadastro atualizado com sucesso!");
+                    </script>
+                </body>
+            </html>
+        """
+        return HTMLResponse(content=redirect_response)
+        
+    except Exception as e:
+        print(e)
+        return {"error": "Erro ao atualizar cadastro", "message": e}
     
 
     
