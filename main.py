@@ -1,8 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from starlette.responses import RedirectResponse
-import pypyodbc as odbc
 import sqlite3
 
 app = FastAPI()
@@ -51,6 +49,8 @@ async def adicionar_pessoa(request: Request):
     endereco = form["endereco"]
     cpf = form["cpf"]
     estado_civil = form["estadoCivil"]
+    
+
     try:
         insert_string = "INSERT INTO funcionarios (nome, nascimento, endereco, cpf, estado_civil) VALUES (?, ?, ?, ?, ?)"
         insert_values = (nome, nascimento, endereco, cpf, estado_civil)
@@ -70,11 +70,28 @@ async def adicionar_pessoa(request: Request):
                 </body>
             </html>
         """
-        return HTMLResponse(content=redirect_response)
         
     except Exception as e:
+        redirect_response = f"""
+            <html>
+                <head>
+                    <meta http-equiv="refresh" content="0; url=/">
+                </head>
+                <body>
+                    <script>
+                        alert("Erro ao adicionar pessoa!");
+                        alert("{e}");
+                    </script>
+                </body>
+            </html>
+        """
         print(e)
-        return {"error": "Erro ao adicionar pessoa", "message": e}
+
+
+    
+
+    return HTMLResponse(content=redirect_response)
+    
     
     
 @app.delete("/deletar_cadastro")
@@ -88,7 +105,7 @@ async def deletar_cadastro(request: Request, id: str = None):
 
         cursor.execute(string, (id,))
         banco.commit()
-        print("Pessoa removida com sucesso")
+        print(f"Pessoa removida com sucesso. id: {id}")
         redirect_response = f"""
             <html>
                 <head>
@@ -101,17 +118,31 @@ async def deletar_cadastro(request: Request, id: str = None):
                 </body>
             </html>
         """
-        return HTMLResponse(content=redirect_response)
+        
         
     except Exception as e:
         print(e)
-        return {"error": "Erro ao remover pessoa", "message": e}
+        redirect_response = f"""
+            <html>
+                <head>
+                    <meta http-equiv="refresh" content="0; url=/">
+                </head>
+                <body>
+                    <script>
+                        alert("Erro ao deletar cadastro!");
+                        alert("{e}");
+                    </script>
+                </body>
+            </html>
+        """
     
+    return HTMLResponse(content=redirect_response)
+    
+
 @app.get("/pesquisar")
 async def pesquisar(request: Request, coluna: str, valorPesquisa: str):
     try:
         string = f"select * from funcionarios where {coluna} = ?"
-
         cursor.execute(string, (valorPesquisa,))
         pessoas = cursor.fetchall()
         print(pessoas)

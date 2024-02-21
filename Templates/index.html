@@ -5,21 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        :root {
+            --background: #14223b;
+            --cor_texto: #ffffff;
+            --cor_destaque: #143d3b; 
+            --cor_highlight: #64883d; 
+            --cor_outline: #dddddd; 
+        }
+        /*
+            061309
+            64883d
+            14223b
+            050c0f
+            061310
+            2a6b7e
+        */
+
         table {
             border-collapse: collapse;
-            width: 80%;
+            width: 100%;
         } 
         th, td {
-            border: 1px solid #dddddd;
+            border: 1px solid var(--cor_outline);
             text-align: left;
             padding: 8px;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: var(--cor_destaque);
         }
         tr:hover {
-            background-color: #f5f5f5;
+            background-color: var(--cor_highlight);
             cursor: pointer;
+        }
+        body, select, option {
+            background-color: var(--background);
+            color: var(--cor_texto);
+        }
+        input, button, select, option{
+            border: 2px solid;
+            border-color: var(--cor_destaque);
+            box-shadow: none;
+        }
+        button{
+            background-color: var(--cor_destaque);
+            color: var(--cor_texto);
+            padding: 4px;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--cor_highlight);
         }
     </style>
 
@@ -44,7 +78,7 @@
     </form>
 
     
-    <div style="max-height: 300px; overflow-y: auto;">
+    <div id="container" style="max-height: 475px; overflow-y: auto; width: 80%;">
         <table id="tabelaPessoas">
             <tr>
                 <th>ID</th>
@@ -93,7 +127,7 @@
 
     <form id="formularioDeletar" action="/deletar_cadastro" method="delete">
         <input type="hidden" id="idToDelete" name="id"> 
-        <button type="submit" onclick="confirmarDelecao()">Deletar Cadastro</button>
+        <button type="button" onclick="confirmarDelecao()">Deletar Cadastro</button>
     </form>
 
     <form id="formularioUpdate" action="/update" method="post">
@@ -106,7 +140,8 @@
 
             if (confirm("Deseja mesmo Deletar esse cadastro?") == true) {
                 const idToDelete = document.getElementById('idToDelete').value;
-                fetch('/deletar_cadastro?id=${idToDelete}', {
+                url = '/deletar_cadastro?id=' + id
+                fetch(url, {
                     method: 'DELETE',
                 })
                 .then(response => {
