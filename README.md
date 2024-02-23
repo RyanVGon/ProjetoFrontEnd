@@ -1,20 +1,29 @@
-# ProjetoFrontEnd
+# Tecnologias Utilizadas
 
-Para iniciar o servidor Python, é necessário executar o seguinte comando no terminal:
+Backend: Python com FastAPI e SQLite para o banco de dados.
 
-python -m uvicorn main:app
+Frontend: HTML, CSS e JavaScript.
 
+Estilo Visual: Personalizado com CSS.
 
-# Utilizando o software
+# Instalação e Execução
+Instale as dependências do Python usando o pip:
 
-No topo da tela, há uma barra de pesquisa. Nela, selecione a coluna desejada e digite o valor correspondente. (O campo de nascimento deve seguir o padrão AAAA-MM-DD).
+pip install -r requirements.txt
 
-Os campos abaixo da tabela são usados para inserir novos cadastros e atualizá-los.
+Execute o aplicativo Python:
 
-Para atualizar um cadastro, clique nele, faça as alterações nos campos abaixo e clique em "Atualizar".
+uvicorn main:app --reload
 
-Para deletar, basta clicar no cadastro desejado e selecionar "Deletar".
+Abra o navegador da web e acesse http://localhost:8000 para utilizar o aplicativo.
 
-Para adicionar, insira os valores nos campos abaixo da tabela e clique em "Adicionar".
+# Como Usar
+Ao acessar a página inicial, você verá uma lista de todas as pessoas cadastradas.
 
-O botão "Limpar Pesquisa" remove o filtro da pesquisa.
+Utilize o formulário de pesquisa para filtrar pessoas por diferentes critérios.
+
+Para adicionar uma nova pessoa, preencha o formulário na parte inferior da página e clique no botão "Adicionar Pessoa".
+
+Para atualizar ou excluir uma pessoa existente, clique na linha correspondente na tabela de pessoas e utilize os botões fornecidos.
+
+Para atualizar um cadastro, clique na linha correspondete, faça as alterações nos campos abaixo da tabela e clique em "Atualizar".
