@@ -1,6 +1,9 @@
 import random
 import sqlite3
 
+
+#Ao executar este arquivo ele vai limpar o banco e adicionar varias "pessoas" ao banco
+
 try:
     banco = sqlite3.connect("Banco_funcionarios")
     cursor = banco.cursor()
