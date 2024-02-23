@@ -6,11 +6,11 @@
     <title>Document</title>
     <style>
         :root {
-            --background: #14223b;
+            --background: #0c1e2f;
             --cor_texto: #ffffff;
-            --cor_destaque: #143d3b; 
-            --cor_highlight: #64883d; 
-            --cor_outline: #dddddd; 
+            --cor_destaque: #682c59; 
+            --cor_highlight: #2c6841; 
+            --cor_outline: #65707b; 
         }
         /*
             061309
@@ -43,11 +43,13 @@
         }
         input, button, select, option{
             border: 2px solid;
-            border-color: var(--cor_destaque);
+            border-color: var(--cor_outline);
             box-shadow: none;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
         button{
-            background-color: var(--cor_destaque);
+            background-color: var(--cor_outline);
             color: var(--cor_texto);
             padding: 4px;
         }
@@ -55,12 +57,37 @@
             outline: none;
             border-color: var(--cor_highlight);
         }
+        .top-bar {
+            background-color: var(--background);
+            height: 50px;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .logo {
+            height: 175%;
+            max-width: 200px;
+            margin: 0 auto;
+            display: block;
+            float: left;
+        }
+        input[type="date"] {
+            font-size: 15px;
+            border: 1px solid var(--cor_outline);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
     </style>
 
 
 
 </head>
 <body>
+    <div class="top-bar">
+        <img class="logo" src="/logo" alt="Logo">
+    </div>
+    <br>
     <h1>Lista de Pessoas</h1>
 
     <form id="formPesquisa" action="/pesquisar" method="get">
@@ -78,7 +105,7 @@
     </form>
 
     
-    <div id="container" style="max-height: 475px; overflow-y: auto; width: 80%;">
+    <div id="container" style="max-height: 475px; overflow-y: auto; width: 80%; border-radius: 8px; box-sizing: border-box;">
         <table id="tabelaPessoas">
             <tr>
                 <th>ID</th>

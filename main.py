@@ -1,10 +1,12 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import FileResponse
 import sqlite3
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+
 
 try:
     banco = sqlite3.connect("Banco_funcionarios")
@@ -193,5 +195,6 @@ async def atualizar_cadastro(request: Request):
         return {"error": "Erro ao atualizar cadastro", "message": e}
     
 
-    
-    
+@app.get("/logo")
+async def get_logo():
+    return FileResponse("Logo.png")
